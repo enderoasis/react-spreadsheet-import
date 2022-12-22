@@ -41,10 +41,11 @@ export type StepState =
     }
 
 interface Props {
-  nextStep: () => void
+  nextStep: () => void,
+  prevStep: () => void
 }
 
-export const UploadFlow = ({ nextStep }: Props) => {
+export const UploadFlow = ({ nextStep, prevStep }: Props) => {
   const { initialStepState } = useRsi()
   const [state, setState] = useState<StepState>(initialStepState || { type: StepType.upload })
   const { maxRecords, translations, uploadStepHook, selectHeaderStepHook, matchColumnsStepHook } = useRsi()
@@ -110,6 +111,17 @@ export const UploadFlow = ({ nextStep }: Props) => {
               errorToast((e as Error).message)
             }
           }}
+          onPrevious={async () => {
+          try {
+            setState({
+              type: StepType.upload
+            });
+            prevStep()
+          } catch (e) {
+            errorToast((e as Error).message)
+          }
+        }
+        }
         />
       )
     case StepType.selectHeader:
@@ -129,6 +141,17 @@ export const UploadFlow = ({ nextStep }: Props) => {
               errorToast((e as Error).message)
             }
           }}
+          onPrevious={async () => {
+            try {
+              setState({
+                type: StepType.upload
+              });
+              prevStep()
+            } catch (e) {
+              errorToast((e as Error).message)
+            }
+          }
+          }
         />
       )
     case StepType.matchColumns:
@@ -143,15 +166,41 @@ export const UploadFlow = ({ nextStep }: Props) => {
                 type: StepType.validateData,
                 data,
               })
+              
               nextStep()
             } catch (e) {
               errorToast((e as Error).message)
             }
           }}
+          onPrevious={async () => {
+            try {
+              setState({
+                type: StepType.upload
+              });
+              prevStep()
+            } catch (e) {
+              errorToast((e as Error).message)
+            }
+          }
+          }
         />
       )
     case StepType.validateData:
-      return <ValidationStep initialData={state.data} />
+      return <ValidationStep initialData={state.data}
+      onPrevious={async () => {
+        try {
+          setState({
+            type: StepType.matchColumns,
+            data: state.rawData,
+            headerValues: state.headerValues
+        });
+          prevStep()
+        } catch (e) {
+          errorToast((e as Error).message)
+        }
+      }
+      }
+      />
     default:
       return <Progress isIndeterminate />
   }

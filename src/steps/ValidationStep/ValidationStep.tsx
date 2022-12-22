@@ -15,7 +15,7 @@ type Props<T extends string> = {
   initialData: Data<T>[]
 }
 
-export const ValidationStep = <T extends string>({ initialData }: Props<T>) => {
+export const ValidationStep = <T extends string>({ initialData, onPrevious }: Props<T>) => {
   const { translations, fields, onClose, onSubmit, rowHook, tableHook } = useRsi<T>()
   const styles = useStyleConfig("ValidationStep") as typeof themeOverrides["components"]["ValidationStep"]["baseStyle"]
 
@@ -102,6 +102,13 @@ export const ValidationStep = <T extends string>({ initialData }: Props<T>) => {
     }
   }
 
+  const handleOnPrevious = useCallback(
+    async () => {
+      await onPrevious()
+    },
+    [onPrevious],
+  )
+
   return (
     <>
       <SubmitDataAlert
@@ -149,7 +156,7 @@ export const ValidationStep = <T extends string>({ initialData }: Props<T>) => {
           />
         </Box>
       </ModalBody>
-      <ContinueButton onContinue={onContinue} title={translations.validationStep.nextButtonTitle} />
+      <ContinueButton title_back="Previous" onPrevious={handleOnPrevious} onContinue={onContinue} title={translations.validationStep.nextButtonTitle} />
     </>
   )
 }

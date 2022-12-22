@@ -11,6 +11,7 @@ type ColumnGridProps<T extends string> = {
   userColumn: (column: Column<T>) => React.ReactNode
   templateColumn: (column: Column<T>) => React.ReactNode
   onContinue: (val: Record<string, string>[]) => void
+  onPrevious: () => void
   isLoading: boolean
 }
 
@@ -21,6 +22,7 @@ export const ColumnGrid = <T extends string>({
   userColumn,
   templateColumn,
   onContinue,
+  onPrevious,
   isLoading,
 }: ColumnGridProps<T>) => {
   const { translations } = useRsi()
@@ -66,6 +68,8 @@ export const ColumnGrid = <T extends string>({
       <ContinueButton
         isLoading={isLoading}
         onContinue={onContinue}
+        onPrevious={onPrevious}
+        title_back="Previous"
         title={translations.matchColumnsStep.nextButtonTitle}
       />
     </>

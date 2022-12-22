@@ -16,14 +16,17 @@ export const translations = {
     selectSheet: {
       title: "Select the sheet to use",
       nextButtonTitle: "Next",
+      backButtonTitle: "Back"
     },
   },
   selectHeaderStep: {
     title: "Select header row",
     nextButtonTitle: "Next",
+    backButtonTitle: "Back"
   },
   matchColumnsStep: {
     title: "Match Columns",
+    backButtonTitle: "Back",
     nextButtonTitle: "Next",
     userTableTitle: "Your table",
     templateTitle: "Will become",
@@ -38,6 +41,7 @@ export const translations = {
   validationStep: {
     title: "Validate data",
     nextButtonTitle: "Confirm",
+    backButtonTitle: "Back",
     noRowsMessage: "No data found",
     noRowsMessageWhenFiltered: "No data containing errors",
     discardButtonTitle: "Discard selected rows",

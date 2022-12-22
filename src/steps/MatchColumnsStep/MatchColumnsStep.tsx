@@ -17,6 +17,8 @@ export type MatchColumnsProps<T extends string> = {
   data: RawData[]
   headerValues: RawData
   onContinue: (data: any[], rawData: RawData[], columns: Columns<T>) => void
+  onPrevious: () => Promise<void>
+
 }
 
 export enum ColumnType {
@@ -62,7 +64,7 @@ export type Column<T extends string> =
 
 export type Columns<T extends string> = Column<T>[]
 
-export const MatchColumnsStep = <T extends string>({ data, headerValues, onContinue }: MatchColumnsProps<T>) => {
+export const MatchColumnsStep = <T extends string>({ data, headerValues, onContinue, onPrevious }: MatchColumnsProps<T>) => {
   const toast = useToast()
   const dataExample = data.slice(0, 2)
   const { fields, autoMapHeaders, autoMapDistance, translations } = useRsi<T>()
@@ -144,6 +146,15 @@ export const MatchColumnsStep = <T extends string>({ data, headerValues, onConti
     }
   }, [unmatchedRequiredFields.length, onContinue, columns, data, fields])
 
+  const handleOnPrevious = useCallback(
+    async () => {
+      setIsLoading(true)
+      await onPrevious()
+      setIsLoading(false)
+    },
+    [onPrevious],
+  )
+
   const handleAlertOnContinue = useCallback(async () => {
     setShowUnmatchedFieldsAlert(false)
     setIsLoading(true)
@@ -169,6 +180,7 @@ export const MatchColumnsStep = <T extends string>({ data, headerValues, onConti
       <ColumnGrid
         columns={columns}
         onContinue={handleOnContinue}
+        onPrevious={handleOnPrevious}
         isLoading={isLoading}
         userColumn={(column) => (
           <UserTableColumn

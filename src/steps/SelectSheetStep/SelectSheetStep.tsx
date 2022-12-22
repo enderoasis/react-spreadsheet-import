@@ -7,9 +7,10 @@ import type { themeOverrides } from "../../theme"
 type SelectSheetProps = {
   sheetNames: string[]
   onContinue: (sheetName: string) => Promise<void>
+  onPrevious: () => Promise<void>
 }
 
-export const SelectSheetStep = ({ sheetNames, onContinue }: SelectSheetProps) => {
+export const SelectSheetStep = ({ sheetNames, onContinue, onPrevious }: SelectSheetProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const { translations } = useRsi()
   const [value, setValue] = useState(sheetNames[0])
@@ -23,6 +24,14 @@ export const SelectSheetStep = ({ sheetNames, onContinue }: SelectSheetProps) =>
       setIsLoading(false)
     },
     [onContinue],
+  )
+  const handleOnPrevious = useCallback(
+    async () => {
+      setIsLoading(true)
+      await onPrevious()
+      setIsLoading(false)
+    },
+    [onPrevious],
   )
 
   return (
@@ -42,7 +51,9 @@ export const SelectSheetStep = ({ sheetNames, onContinue }: SelectSheetProps) =>
       <ContinueButton
         isLoading={isLoading}
         onContinue={() => handleOnContinue(value)}
+        onPrevious={() => handleOnPrevious()}
         title={translations.uploadStep.selectSheet.nextButtonTitle}
+        title_back={translations.uploadStep.selectSheet.backButtonTitle}
       />
     </>
   )

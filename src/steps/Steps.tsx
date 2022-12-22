@@ -10,7 +10,7 @@ const steps = ["uploadStep", "selectHeaderStep", "matchColumnsStep", "validation
 
 export const Steps = () => {
   const { translations } = useRsi()
-  const { nextStep, activeStep } = useSteps({
+  const { nextStep, prevStep, activeStep } = useSteps({
     initialStep: 0,
   })
 
@@ -23,7 +23,7 @@ export const Steps = () => {
           ))}
         </Stepper>
       </ModalHeader>
-      <UploadFlow nextStep={nextStep} />
+      <UploadFlow nextStep={nextStep} prevStep={prevStep}/>
     </>
   )
 }
